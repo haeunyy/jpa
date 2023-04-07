@@ -1,6 +1,7 @@
-package com.greedy.section02.column;
+package com.greedy.section03.primarykey.subsection02.table;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -14,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
-public class ColumnMappingTests {
+public class SequenceTableMappingTests {
 
 	private static EntityManagerFactory entityManagerFactory;
 	private EntityManager entityManager;
@@ -39,63 +40,45 @@ public class ColumnMappingTests {
 		entityManager.close();
 	}
 	
-	
-	
+	/* 3. TABLE 전략 */
 	@Test
-	public void 컬럼에서_사용하는_속성테스트() {
-		
+	public void 식별자_매핑_테스트() {
 		
 		// given 
 		Member member = new Member();
-		member.setMemberNo(1);
 		member.setMemberId("user01");
 		member.setMemberPwd("pass01");
 		member.setNickname("홍길동");
 		member.setPhone("010-1234-1234");
 		member.setAddress("서울시 ");
-		member.setEnrollDate(new java.sql.Date(System.currentTimeMillis()));
+		member.setEnrollDate(new Date(System.currentTimeMillis()));
 		member.setMemberRole("ROLE_MEMBER");
 		member.setStatus("Y");
 		
+		Member member2 = new Member();
+		member2.setMemberId("user02");
+		member2.setMemberPwd("pass02");
+		member2.setNickname("김길자");
+		member2.setPhone("010-1234-1234");
+		member2.setAddress("서울시 ");
+		member2.setEnrollDate(new Date(System.currentTimeMillis()));
+		member2.setMemberRole("ROLE_MEMBER");
+		member2.setStatus("Y");
+
 		// when 
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
 		entityManager.persist(member);
+		entityManager.persist(member2);
 		transaction.commit();
 		
 		// then 
-		Member foundMember = entityManager.find(Member.class, member.getMemberNo());
-		assertEquals(member.getMemberNo(), foundMember.getMemberNo());
+		String jpql = "SELECT A.memberNo FROM sequence_table_member A";
+		List<Integer> memberNoList = entityManager.createQuery(jpql, Integer.class).getResultList();
+		/* createQuery로 쿼리를 작성하고 실행한다. integer타입으로 반환받아서 List로 저장한다. */
 		
-		/* 테이블명을 필드명으로 작성했다. */
-		String jpql = "SELECT TO_CHAR(A.enrollDate, 'YYYY/MM/DD HH:mi:ss') FROM section02_member A WHERE A.memberNo=1";
-		String dateTime = entityManager.createQuery(jpql, String.class).getSingleResult(); 
-		System.out.println(dateTime);
-		
+		memberNoList.forEach(System.out::println);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 }

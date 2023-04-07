@@ -1,10 +1,12 @@
-package com.greedy.section02.column;
+package com.greedy.section04.enumtype;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Persistence;
 
 import org.junit.jupiter.api.AfterAll;
@@ -14,8 +16,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
-public class ColumnMappingTests {
-
+/* MemeberRole을 Enum타입으로 작성해보자 */
+public class EnumTypeMappingTests {
 	private static EntityManagerFactory entityManagerFactory;
 	private EntityManager entityManager;
 
@@ -39,11 +41,8 @@ public class ColumnMappingTests {
 		entityManager.close();
 	}
 	
-	
-	
 	@Test
-	public void 컬럼에서_사용하는_속성테스트() {
-		
+	public void enum타입_매핑_테스트() {
 		
 		// given 
 		Member member = new Member();
@@ -54,48 +53,21 @@ public class ColumnMappingTests {
 		member.setPhone("010-1234-1234");
 		member.setAddress("서울시 ");
 		member.setEnrollDate(new java.sql.Date(System.currentTimeMillis()));
-		member.setMemberRole("ROLE_MEMBER");
+		member.setMemberRole(RoleType.MEMBER);	// Enum RoleType으로 수정
 		member.setStatus("Y");
 		
 		// when 
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
+		EntityTransaction trans = entityManager.getTransaction();
+		trans.begin();
 		entityManager.persist(member);
-		transaction.commit();
+		trans.commit();
 		
 		// then 
 		Member foundMember = entityManager.find(Member.class, member.getMemberNo());
 		assertEquals(member.getMemberNo(), foundMember.getMemberNo());
+		System.out.println(foundMember);
 		
-		/* 테이블명을 필드명으로 작성했다. */
-		String jpql = "SELECT TO_CHAR(A.enrollDate, 'YYYY/MM/DD HH:mi:ss') FROM section02_member A WHERE A.memberNo=1";
-		String dateTime = entityManager.createQuery(jpql, String.class).getSingleResult(); 
-		System.out.println(dateTime);
-		
+		/* memberRole에 1로 삽입된다. @Enumerated(EnumType.STRING) 어노테이션을 사용하면 설정한 MEMBER 리터럴 값으로 삽입이 가능하다. */
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }

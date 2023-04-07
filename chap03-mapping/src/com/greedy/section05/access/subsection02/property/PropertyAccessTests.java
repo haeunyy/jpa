@@ -1,4 +1,4 @@
-package com.greedy.section02.column;
+package com.greedy.section05.access.subsection02.property;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
-public class ColumnMappingTests {
+public class PropertyAccessTests {
 
 	private static EntityManagerFactory entityManagerFactory;
 	private EntityManager entityManager;
@@ -38,64 +38,32 @@ public class ColumnMappingTests {
 	public void closeManager() {
 		entityManager.close();
 	}
-	
-	
-	
+
+
 	@Test
-	public void 컬럼에서_사용하는_속성테스트() {
-		
-		
+	public void property_접근_테스트() {
+
 		// given 
 		Member member = new Member();
 		member.setMemberNo(1);
 		member.setMemberId("user01");
 		member.setMemberPwd("pass01");
 		member.setNickname("홍길동");
-		member.setPhone("010-1234-1234");
-		member.setAddress("서울시 ");
-		member.setEnrollDate(new java.sql.Date(System.currentTimeMillis()));
-		member.setMemberRole("ROLE_MEMBER");
-		member.setStatus("Y");
-		
+
 		// when 
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
+		EntityTransaction trans = entityManager.getTransaction();
+		trans.begin();
 		entityManager.persist(member);
-		transaction.commit();
+		trans.commit();
 		
 		// then 
-		Member foundMember = entityManager.find(Member.class, member.getMemberNo());
-		assertEquals(member.getMemberNo(), foundMember.getMemberNo());
-		
-		/* 테이블명을 필드명으로 작성했다. */
-		String jpql = "SELECT TO_CHAR(A.enrollDate, 'YYYY/MM/DD HH:mi:ss') FROM section02_member A WHERE A.memberNo=1";
-		String dateTime = entityManager.createQuery(jpql, String.class).getSingleResult(); 
-		System.out.println(dateTime);
-		
+		String jpql = "SELECT A.nickname FROM property_access_member A WHERE A.memberNo = 1";
+		String registNickname = entityManager.createQuery(jpql, String.class).getSingleResult();
+		assertEquals("홍길동 님", registNickname);
+		System.out.println(registNickname);
+
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	/* @Id의 위치에 따라 @Access 방식이 결정되며 이는 전역적인 설정이다. 
+	 * @Access설정을 getter에 지정하게 되면 특정 필드만 getter메소드로 접근할 수 있으며, 
+	 * 추가 로직이 필요한 경우 설정한다. */
 }
