@@ -61,7 +61,7 @@ public class ProductTest {
 		// then 
 		Product productFound = entityManager.find(Product.class, product.getProductId());
 		assertEquals(product.getProductId(), 1);
-		/* 지금 무엇을 하고 싶은가 */
+		/* 연산작업 추가해보자 */
 	}
 	
 	
