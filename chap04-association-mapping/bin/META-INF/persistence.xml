@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.1">
+	
+	<persistence-unit name="jpatest">
+		<properties>
+			<!-- 접속 주소 -->
+			<property name="javax.persistence.jdbc.driver" value="oracle.jdbc.driver.OracleDriver"/>
+			<property name="javax.persistence.jdbc.user" value="C##GREEDY"/>
+			<property name="javax.persistence.jdbc.password" value="GREEDY"/>
+			<property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+		
+			<!-- sql구문 포맷형태로 확인 -->
+			<property name="hibernate.show_sql" value="true"/>
+			<property name="hibernate.format_sql" value="true"/>
+		</properties>
+	
+	</persistence-unit>
+
+</persistence>
