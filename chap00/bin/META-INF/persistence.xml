@@ -12,8 +12,6 @@
 			<!-- sql구문 포맷형태로 확인 -->
 			<property name="hibernate.show_sql" value="true"/>
 			<property name="hibernate.format_sql" value="true"/>
-			<!-- DML 구문 수행시 자동으로 스키마 생성(테이블 생성) 을 위한 설정 추가 -->
-			<property name="hibernate.hbm2ddl.auto" value="create"/>
 		</properties>
 	
 	</persistence-unit>
